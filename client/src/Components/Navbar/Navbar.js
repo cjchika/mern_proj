@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { googleLogout } from "@react-oauth/google";
 import { AppBar, Avatar, Toolbar, Typography, Button } from "@material-ui/core";
 import Memories from "../../images/memories.png";
 
@@ -7,8 +8,11 @@ import useStyles from "./styles";
 
 const Navbar = () => {
   const classes = useStyles();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
 
-  const user = null;
+  // JSON.parse(localStorage.getItem("profile"))
+
+  console.log(user);
 
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
@@ -34,20 +38,21 @@ const Navbar = () => {
           <div className={classes.profile}>
             <Avatar
               className={classes.purple}
-              alt={user.result.name}
-              src={user.result.imageUrl}
+              alt={user.name}
+              src={user.picture}
             >
-              {user.result.name.charAt(0)}
+              {user.given_name.charAt(0)}
             </Avatar>
             <Typography className={classes.userName} variant="h6">
-              {user.result.name}
+              {user.given_name}
             </Typography>
             <Button
+              onClick={googleLogout}
               variant="contained"
               className={classes.logout}
               color="secondary"
             >
-              Login
+              Logout
             </Button>
           </div>
         ) : (

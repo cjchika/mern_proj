@@ -7,8 +7,9 @@ import {
   Typography,
   Container,
 } from "@material-ui/core";
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import { useDispatch } from "react-redux";
+import jwt_decode from "jwt-decode";
 
 import LockOutOutlinedIcon from "@material-ui/icons/LockOutlined";
 import useStyles from "./styles";
@@ -34,11 +35,10 @@ const Auth = () => {
   };
 
   const googleSuccess = async (res) => {
-    const result = res?.profileObj;
-    const token = res?.tokenId;
+    const result = jwt_decode(res.credential);
 
     try {
-      dispatch({ type: "AUTH", data: { result, token } });
+      dispatch({ type: "AUTH", data: result });
     } catch (error) {
       console.log(error);
     }
@@ -102,6 +102,7 @@ const Auth = () => {
           >
             {isSignup ? "Sign Up" : "Sign In"}
           </Button>
+
           <GoogleLogin
             onSuccess={googleSuccess}
             onError={(err) => console.log(err)}
