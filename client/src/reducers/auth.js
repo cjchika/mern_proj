@@ -8,7 +8,7 @@ const authReducer = (state = { authData: null }, action) => {
   }
 
   if (action.type === LOGOUT) {
-    // --
+    localStorage.removeItem("profile");
   }
 
   return state;

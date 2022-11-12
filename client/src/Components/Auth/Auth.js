@@ -10,6 +10,7 @@ import {
 import { GoogleLogin } from "@react-oauth/google";
 import { useDispatch } from "react-redux";
 import jwt_decode from "jwt-decode";
+import { useHistory } from "react-router-dom";
 
 import LockOutOutlinedIcon from "@material-ui/icons/LockOutlined";
 import useStyles from "./styles";
@@ -20,6 +21,7 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -39,6 +41,8 @@ const Auth = () => {
 
     try {
       dispatch({ type: "AUTH", data: result });
+      history.push("/");
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
