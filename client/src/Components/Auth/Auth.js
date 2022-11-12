@@ -7,9 +7,9 @@ import {
   Typography,
   Container,
 } from "@material-ui/core";
+import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { useDispatch } from "react-redux";
 
-import { GoogleLogin } from "@react-oauth/google";
-import IconJs from "./icon";
 import LockOutOutlinedIcon from "@material-ui/icons/LockOutlined";
 import useStyles from "./styles";
 import Input from "./Input";
@@ -18,6 +18,7 @@ const Auth = () => {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
+  const dispatch = useDispatch();
 
   const handleShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -30,6 +31,17 @@ const Auth = () => {
   const switchMode = () => {
     setIsSignup((prevSwitch) => !prevSwitch);
     handleShowPassword(false);
+  };
+
+  const googleSuccess = async (res) => {
+    const result = res?.profileObj;
+    const token = res?.tokenId;
+
+    try {
+      dispatch({ type: "AUTH", data: { result, token } });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -91,7 +103,7 @@ const Auth = () => {
             {isSignup ? "Sign Up" : "Sign In"}
           </Button>
           <GoogleLogin
-            onSuccess={(res) => console.log(res)}
+            onSuccess={googleSuccess}
             onError={(err) => console.log(err)}
           />
           <Grid container justifyContent="flex-end">
